@@ -7,11 +7,13 @@ library(plyr)
 ```
 
 ## Loading and preprocessing the data
-###### 1. Load the data (i.e. read.csv())
+
+###### 1. Load the data 
 ```{r, results='markup', warning=TRUE, message=TRUE}
 activity <- read.csv("activity.csv")
 ```
-###### 2. Process/transform the data (if necessary) into a format suitable for your analysis
+
+###### 2. Process/transform the data into a format suitable for the analysis
 ```{r}
 activity$day <- weekdays(as.Date(activity$date))
 activity$DateTime<- as.POSIXct(activity$date, format="%Y-%m-%d")
@@ -21,6 +23,7 @@ clean <- activity[!is.na(activity$steps),]
 
 
 ## What is mean total number of steps taken per day?
+
 ###### 1. Calculate the total number of steps taken per day.
 ```{r}
 sumTable <- aggregate(activity$steps ~ activity$date, FUN=sum )
@@ -63,6 +66,7 @@ p + geom_line()+xlab("Interval")+ylab("Average Number of Steps")+ggtitle("Averag
 ```
 
 ###### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
 ```{r}
 ##Maximum steps by interval
 maxSteps <- max(intervalTable$Avg)
@@ -71,7 +75,7 @@ A_maxSteps <- as.integer(max(intervalTable$Avg))
 time <- intervalTable[intervalTable$Avg==maxSteps,1]
 ```
 * The maximum number of steps for a 5-minute interval was `r A_maxSteps` steps.
-* The 5-minute interval which had the maximum number of steps was the `r time`th interval.
+* The `r time`th interval has the maximum number of steps.
 
 ## Imputing missing values
 
@@ -80,9 +84,10 @@ time <- intervalTable[intervalTable$Avg==maxSteps,1]
 ##Number of NAs in original data set
 count <- nrow(activity[is.na(activity$steps),])
 ```
+
 * The total number of rows with steps = 'NA' is `r count`
 
-###### 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+###### 2. Devise a strategy for filling in all of the missing values in the dataset. 
 
 ```{r}
 ## Create the average number of steps per weekday and interval
@@ -111,8 +116,14 @@ colnames(sumTable2)<- c("Date", "Steps")
 ## Mean of Steps with NA data taken care of
 A_Mean <- as.integer(mean(sumTable2$Steps))
 
+## Difference from the original mean
+diff_Mean <- A_Mean - stepsByDayMean
+
 ## Median of Steps with NA data taken care of
 A_Median <- as.integer(median(sumTable2$Steps))
+
+## Difference from the original median
+diff_Median <- A_Median - stepsByDayMedian
 
 ## Creating the histogram of total steps per day, categorized by data set to show impact
 hist(sumTable2$Steps, breaks=5, xlab="Steps", main = "Total Steps per Day with NAs Fixed", col="Red")
@@ -122,8 +133,9 @@ legend("topright", c("Imputed Data", "Non-NA Data"), fill=c("Red", "Green") )
 ```
 
 
-* The new mean of the imputed data is `r A_Mean` steps compared to the old mean of `r stepsByDayMean` steps. 
-* The new median of the imputed data is `r A_Median` steps compared to the old median of `r stepsByDayMedian` steps.
+* The new mean of the imputed data is `r A_Mean` steps compared to the old mean of `r stepsByDayMean` steps. The difference is `r diff_Mean` steps.
+
+* The new median of the imputed data is `r A_Median` steps compared to the old median of `r stepsByDayMedian`. The difference is `r diff_Median` steps.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
