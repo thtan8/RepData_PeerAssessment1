@@ -115,12 +115,13 @@ A_Mean <- as.integer(mean(sumTable2$Steps))
 A_Median <- as.integer(median(sumTable2$Steps))
 
 ## Creating the histogram of total steps per day, categorized by data set to show impact
-hist(sumTable2$Steps, breaks=5, xlab="Steps", main = "Total Steps per Day with NAs Fixed", col="Black")
-hist(sumTable$Steps, breaks=5, xlab="Steps", main = "Total Steps per Day with NAs Fixed", col="Grey", add=T)
-legend("topright", c("Imputed Data", "Non-NA Data"), fill=c("black", "grey") )
-
+hist(sumTable2$Steps, breaks=5, xlab="Steps", main = "Total Steps per Day with NAs Fixed", col="Red")
+hist(sumTable$Steps, breaks=5, xlab="Steps", main = "Total Steps per Day with NAs Fixed", col="Green", add=T)
+legend("topright", c("Imputed Data", "Non-NA Data"), fill=c("Red", "Green") )
 
 ```
+
+
 * The new mean of the imputed data is `r A_Mean` steps compared to the old mean of `r stepsByDayMean` steps. 
 * The new median of the imputed data is `r A_Median` steps compared to the old median of `r stepsByDayMedian` steps.
 
